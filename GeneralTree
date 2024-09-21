@@ -1,0 +1,87 @@
+   public class Node<T>
+    {
+        public T Key { get; private set; }
+        public List<Node<T>> Children { get; set; }
+        public Node(T Key,List<Node<T>>Children= null) {
+            this.Key = Key;
+            this.Children = Children==null?new List<Node<T>>():Children;
+        }
+        public void AddChild(Node<T> child)
+        {
+            Children.Add(child);
+        }
+    }
+    public class GeneralTree<T>
+    {
+        public static Node<T> Root { get; private set; }
+        
+
+        public GeneralTree(Node<T>root) { 
+            Root = root;
+            
+        }
+
+        private void PrintTree(Node<T> root,string indent="")
+        {
+            Console.WriteLine(indent+root.Key);
+            
+            foreach(Node<T> child in root.Children)
+            {
+                
+                PrintTree(child,indent+"   ");
+            }
+            
+
+        }
+        private Node<T> Find(T nodeKey,Node<T>root)
+        {
+            if(nodeKey.Equals(root.Key))
+                return root;
+           
+            foreach( Node<T> child in root.Children)
+            {
+                Node<T> n=Find(nodeKey,child);
+                if(n!=null) return n;
+            }
+            return null;
+
+        }
+        public Node<T>Find(T nodeKey)
+        {
+            return Find(nodeKey,Root);
+        }
+        
+        public bool IsFound(T nodeKey)
+        {
+            if(Find(nodeKey,Root)!=null)
+                return true;
+            return false;
+        }
+        public void PrintTree()
+        {
+            PrintTree(Root);
+        }
+        private bool AddChildTo(T childKey, T parentKey,Node<T>root)
+        {
+
+            if (parentKey.Equals(root.Key))
+            {
+                root.AddChild(new Node<T>(childKey));
+                return true; 
+            }
+
+            foreach (Node<T> child in root.Children)
+            {
+               if (AddChildTo(childKey, parentKey, child))
+                    return true;
+            }
+
+            return false; 
+
+        }
+        public void AddChildTo(T childKey, T parentKey)
+        {
+            AddChildTo(childKey, parentKey, Root);
+        }
+
+    }
