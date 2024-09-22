@@ -1,141 +1,162 @@
  public class Node<T>
-  {
-      public T Key { get; private set; }
-      public Node<T> Left {  get; set; }
-      public Node<T> Right { get; set; }
-      public Node(T key,Node<T>left=null,Node<T>right = null) {
-          this.Key = key;
-          this.Left = left;
-          this.Right = right;
-          
-      }
+ {
+     public T Key { get; private set; }
+     public Node<T> Left { get; set; }
+     public Node<T> Right { get; set; }
+     public Node(T key, Node<T> left = null, Node<T> right = null)
+     {
+         this.Key = key;
+         this.Left = left;
+         this.Right = right;
+
+     }
+
+ }
+ public class BinaryTree<T>
+ {
+     public Node<T> Root { get; private set; }
+     public int Size {  get; private set; }
      
-  }
-  public class BinaryTree<T>
-  {
-      public Node<T> Root { get; private set; }
-      
-      public BinaryTree(T rootKey)
-      {
-          Root = new Node<T>(rootKey);
-          
-      }
-      public void Print()
-      {
-          if (Root == null)
-              return;
-          
+
+     public BinaryTree(T rootKey)
+     {
          
-          
-          Queue<Node<T>> queue= new Queue<Node<T>>();
-          queue.Enqueue(Root);
+         Root = new Node<T>(rootKey);
+         Size++;
+     }
+     public BinaryTree(List<T>nodes)
+     {
+         Root = new Node<T>(nodes[0]);
+         Size++;
+         for (int i = 1; i < nodes.Count; i++)
+         {
+             this.Add(nodes[i]);
+         }
+
+     }
+     public int Height()
+     {
+         return (int)Math.Floor(Math.Log(Size,2));
+     }
+
+     public void LevelOrder()
+     {
+         if (Root == null)
+             return;
 
 
-          while (queue.Count > 0)
-          {
-              int levelSize = queue.Count;
 
-              // Print all nodes at the current level
-              for (int i = 0; i < levelSize; i++)
-              {
-                  Node<T> node = queue.Dequeue();
-                  Console.Write(node.Key + " ");
-
-                  // Enqueue the left and right children
-                  if (node.Left != null)
-                  {
-                      queue.Enqueue(node.Left);
-                  }
-                  if (node.Right != null)
-                  {
-                      queue.Enqueue(node.Right);
-                  }
+         Queue<Node<T>> queue = new Queue<Node<T>>();
+         queue.Enqueue(Root);
 
 
-              }
-              Console.WriteLine();
-          }
+         while (queue.Count > 0)
+         {
+             int levelSize = queue.Count;
 
-      }
+             // Print all nodes at the current level
+             for (int i = 0; i < levelSize; i++)
+             {
+                 Node<T> node = queue.Dequeue();
+                 Console.Write(node.Key + " ");
 
-      
-      public void Add(T nodeKey) 
-      {
-          
-          Node<T>node = new Node<T>(nodeKey);
-          if (Root == null)
-          {
-              Root=node;
-              return;
-          }
+                 // Enqueue the left and right children
+                 if (node.Left != null)
+                 {
+                     queue.Enqueue(node.Left);
+                 }
+                 if (node.Right != null)
+                 {
+                     queue.Enqueue(node.Right);
+                 }
 
-          Queue<Node<T>> queue = new Queue<Node<T>>();
-          queue.Enqueue(Root);
-          while (queue.Count > 0)
-          {
-              Node<T> current=queue.Dequeue();
-              if (current.Left == null)
-              {
-                  current.Left = node;
-                  return;
-              }
-              else
-              {
-                  queue.Enqueue(current.Left);
-              }
-              if (current.Right == null)
-              {
-                  current.Right = node;
-                  return;
-              }
-              else
-              {
-                  queue.Enqueue(current.Right);
-              }
 
-          }
+             }
+             Console.WriteLine();
+         }
 
+     }
+
+
+     public void Add(T nodeKey)
+     {
+
+         Node<T> node = new Node<T>(nodeKey);
+         Size++;
+         if (Root == null)
+         {
+             Root = node;
+             return;
+         }
+
+         Queue<Node<T>> queue = new Queue<Node<T>>();
+         queue.Enqueue(Root);
+         while (queue.Count > 0)
+         {
+             Node<T> current = queue.Dequeue();
+             if (current.Left == null)
+             {
+                 current.Left = node;
+                 return;
+             }
+             else
+             {
+                 queue.Enqueue(current.Left);
+             }
+             if (current.Right == null)
+             {
+                 current.Right = node;
+                 return;
+             }
+             else
+             {
+                 queue.Enqueue(current.Right);
+             }
+
+         }
          
 
-      }
+
+
+     }
 
      private void PreOrder(Node<T> root)
-      {
-          if (root == null)
-              return;
-          Console.Write(root.Key+" ");
-          PreOrder(root.Left);
-          PreOrder(root.Right);
-      }
-      public void PreOrder()
-      {
-          PreOrder(Root);
-      }
+     {
+         if (root == null)
+             return;
+         Console.Write(root.Key + " ");
+         PreOrder(root.Left);
+         PreOrder(root.Right);
+     }
+     public void PreOrder()
+     {
+         PreOrder(Root);
+     }
 
-      private void InOrder(Node<T> root)
-      {
-          if (root == null)
-              return;
-          
-          InOrder(root.Left);
-          Console.Write(root.Key + " ");
-          InOrder(root.Right);
-      }
-      public void InOrder()
-      {
-          InOrder(Root);
-      }
-      private void PostOrder(Node<T> root)
-      {
-          if (root == null)
-              return;
-          PostOrder(root.Left);
-          PostOrder(root.Right);
-          Console.Write(root.Key + " ");
-      }
-      public void PostOrder()
-      {
-          PostOrder(Root);
-      }
-     
-  }
+     private void InOrder(Node<T> root)
+     {
+         if (root == null)
+             return;
+
+         InOrder(root.Left);
+         Console.Write(root.Key + " ");
+         InOrder(root.Right);
+     }
+     public void InOrder()
+     {
+         InOrder(Root);
+     }
+     private void PostOrder(Node<T> root)
+     {
+         if (root == null)
+             return;
+         PostOrder(root.Left);
+         PostOrder(root.Right);
+         Console.Write(root.Key + " ");
+     }
+     public void PostOrder()
+     {
+         PostOrder(Root);
+     }
+
+ }
