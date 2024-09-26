@@ -1,3 +1,17 @@
+class AVLNode
+{
+    public int Value { get; set; }
+    public AVLNode Left { get; set; }
+    public AVLNode Right { get; set; }
+    public int Height { get; set; }
+
+    public AVLNode(int value)
+    {
+        Value = value;
+        Height = 1; // Initially, when a node is created, its height is set to 1.
+    }
+}
+
 class AVLTree
 {
     private AVLNode root;
@@ -215,6 +229,64 @@ class AVLTree
         }
         return current;
     }
+
+    // Method to search for a value in the AVL Tree
+    public bool Exists(int value)
+    {
+        return Exists(root, value);
+    }
+
+    // Private recursive helper function to perform the search and returns true if found
+    private bool Exists(AVLNode node, int value)
+    {
+        if (node == null)
+        {
+            return false; // Value not found
+        }
+
+        if (value < node.Value)
+        {
+            return Exists(node.Left, value); // Search in the left subtree
+        }
+        else if (value > node.Value)
+        {
+            return Exists(node.Right, value); // Search in the right subtree
+        }
+        else
+        {
+            return true; // Value found
+        }
+    }
+
+
+    // Method to search for a value in the AVL Tree and returns the node if found
+    public AVLNode Search(int value)
+    {
+        return Search(root, value);
+    }
+
+    // Private recursive helper function to perform the search
+    private AVLNode Search(AVLNode node, int value)
+    {
+        if (node == null)
+        {
+            return null; // Value not found
+        }
+
+        if (value < node.Value)
+        {
+            return Search(node.Left, value); // Search in the left subtree
+        }
+        else if (value > node.Value)
+        {
+            return Search(node.Right, value); // Search in the right subtree
+        }
+        else
+        {
+            return node; // Value found, return the node
+        }
+    }
+
 
     public void PrintTree()
     {
