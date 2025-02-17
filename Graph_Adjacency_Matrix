@@ -1,0 +1,109 @@
+using Microsoft.Office.Interop.Excel;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace C_
+{
+    public class Graph
+    {
+        public enum enGraphType { directed,undirected }
+        enGraphType GraphType;
+        int[,] AdjacencyMatrix;
+        List<string>GraphNodes=new List<string>();
+
+        public Graph(List<string>Nodes, enGraphType graphType=enGraphType.undirected)
+        {
+            GraphNodes = Nodes;
+            AdjacencyMatrix = new int[GraphNodes.Count, GraphNodes.Count];
+
+            InitializeMatrix();
+            GraphType = graphType;
+        }
+
+        void InitializeMatrix()
+        {
+            for (int i = 0; i < GraphNodes.Count; i++)
+            {
+                for (int j = 0; j < GraphNodes.Count; j++)
+                {
+                    AdjacencyMatrix[i, j] = 0;
+                }
+            }
+        }
+        public bool IsThereEdgeBetween(string node1, string node2)
+        {
+            int node1Index = GraphNodes.IndexOf(node1);
+            int node2Index = GraphNodes.IndexOf(node2);
+
+            switch (GraphType)
+            {
+                case enGraphType.directed:return (AdjacencyMatrix[node1Index, node2Index] != 0);
+                case enGraphType.undirected:return (AdjacencyMatrix[node1Index, node2Index] != 0
+                        || AdjacencyMatrix[node2Index, node1Index] != 0);
+            }
+            throw new Exception("No other types of graph!!");
+        }
+        public int GetNodeInDegree(string node)
+        {
+            int node1Index = GraphNodes.IndexOf(node);
+            int countOfInDegree = 0;
+            for (int i = 0; i < GraphNodes.Count; i++) 
+            {
+                if(AdjacencyMatrix[i, node1Index]!=0)
+                    countOfInDegree++;
+            }
+            return countOfInDegree;
+        }
+        public int GetNodeOutDegree(string node)
+        {
+            int node1Index = GraphNodes.IndexOf(node);
+            int countOfOutDegree = 0;
+            for (int i = 0; i < GraphNodes.Count; i++)
+            {
+                if (AdjacencyMatrix[node1Index, i] != 0)
+                    countOfOutDegree++;
+            }
+            return countOfOutDegree;
+        }
+        public void AddEdge(string from,string to,int weight=1)
+        {
+            int node1Index = GraphNodes.IndexOf(from);
+            int node2Index = GraphNodes.IndexOf(to);
+
+           
+            AdjacencyMatrix[node1Index, node2Index] = weight;
+            if (GraphType == enGraphType.undirected) 
+            {
+                AdjacencyMatrix[node2Index, node1Index] = weight;
+            }
+            
+           
+        }
+        public void RemoveEdge(string from, string to)
+        {
+            AddEdge(from,to,0);
+        }
+
+        public void PrintMatrix() 
+        {
+            string nodesNameRow=string.Join("  ", GraphNodes);
+            Console.WriteLine("   "+nodesNameRow+"\n");
+            for (int i = 0; i < GraphNodes.Count; i++)
+            {
+                Console.Write(GraphNodes[i]+"  ");
+                for (int j = 0; j < GraphNodes.Count; j++)
+                {
+                    
+                    Console.Write(AdjacencyMatrix[i,j]+"  ");
+                }
+                Console.WriteLine();
+                Console.WriteLine();
+            }
+        }
+       
+       
+    }
+}
