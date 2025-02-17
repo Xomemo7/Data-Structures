@@ -1,0 +1,34 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Permissions;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace C_
+{
+    public class PriorityQueue
+    {
+        Dictionary<int, string> dict=new Dictionary<int, string>(); //priority, value
+        MinHeap heap = new MinHeap();
+        public void Insert(string value,int priority )
+        {
+            dict[priority] = value;
+            heap.Insert(priority);
+              
+        }
+        public string Peek()
+        {
+            return dict[heap.Peek()];
+        }
+        public string Dequeue()
+        {
+           int priority= heap.Extract();
+           string value= dict[priority];
+           dict.Remove(priority);
+           return value;
+        }
+
+
+    }
+}
