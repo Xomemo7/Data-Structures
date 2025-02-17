@@ -1,0 +1,69 @@
+using Microsoft.Office.Interop.Word;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Emit;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace C_
+{
+    public class Graph_AdjacencyList
+    {
+        public enum enGraphType {directed,undirected}
+        enGraphType GraphType;
+        Dictionary<string, Dictionary<string,int>> AdjList = new Dictionary<string, Dictionary<string,int>>();
+        public Graph_AdjacencyList(List<string>nodes,enGraphType graphType=enGraphType.undirected) 
+        {
+            GraphType = graphType;
+
+            foreach (string node in nodes) {
+                AdjList[node] = new Dictionary<string, int>();
+            }
+
+            
+        }
+
+        public bool IsThereEdgeBetween(string from,string to)
+        {
+            return AdjList[from].Any(kvp=>kvp.Key==to);
+        }
+        public int OutDegree(string node)
+        {
+            return AdjList[node].Count();
+        }
+        public int InDegree(string node)
+        {
+           
+            return AdjList.Count(kvp => kvp.Value.ContainsKey(node));
+
+
+        }
+        public void AddEdge(string from,string to,int weight=1)
+        {
+            if (AdjList[from].ContainsKey(to))//overrides old edge
+                RemoveEdge(from, to);
+
+            AdjList[from].Add(to, weight);
+
+            if (GraphType == enGraphType.undirected)
+                AdjList[to].Add(from, weight);
+        }
+        public void RemoveEdge(string from, string to)
+        {
+            AdjList[from].Remove(to);
+
+            if (GraphType == enGraphType.undirected)
+                AdjList[to].Remove(from);
+        }
+        public void PrintGraph()
+        {
+            foreach(var kvp in AdjList)
+            {
+                Console.WriteLine($"{kvp.Key}: {string.Join("  ", kvp.Value.Select(kvp2 => kvp2.ToString()).ToList())}");
+            }
+                
+        }
+
+    }
+}
