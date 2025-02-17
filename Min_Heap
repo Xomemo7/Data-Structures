@@ -1,0 +1,88 @@
+using Microsoft.Office.Interop.Word;
+using NAudio.Dsp;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace C_
+{
+   
+    public class MinHeap
+    {
+        List<int> Heap=new List<int>();
+        public MinHeap()
+        {
+           
+        }
+        
+        public void Insert(int Value)
+        {
+            Heap.Add(Value);
+            HeapifyUp(Heap.Count - 1);
+        }
+        public int Extract()
+        {
+            int val=Heap[0];
+            Heap[0]=Heap[Heap.Count-1];
+            Heap.RemoveAt(Heap.Count - 1);
+            HeapifyDown(0);
+            return val;
+        }
+        void HeapifyDown(int index)
+        {
+            while (index < Heap.Count)
+            {
+                int leftChildIndex = 2 * index + 1;
+                int rightChildIndex = leftChildIndex + 1;
+
+                int smallestIndex = index;
+
+
+                if (leftChildIndex<Heap.Count && Heap[leftChildIndex] < Heap[smallestIndex])
+                    smallestIndex= leftChildIndex;
+                if (rightChildIndex < Heap.Count && Heap[rightChildIndex] < Heap[smallestIndex])
+                    smallestIndex = rightChildIndex;
+
+                if (index == smallestIndex) break;
+
+                Swap(index, smallestIndex);
+                index= smallestIndex;
+            }
+            
+           
+
+
+        }
+        void Swap(int index1, int index2)
+        {
+            (Heap[index1], Heap[index2]) = (Heap[index2], Heap[index1]);//swap
+        }
+        void HeapifyUp(int index)
+        {
+          
+
+            while (index != 0)
+            {
+                int parentIndex = (index-1)/2;
+                if (Heap[index] >= Heap[parentIndex]) break;
+                Swap(index, parentIndex);
+                
+                index = parentIndex;
+
+            }
+
+
+        }
+        public int Peek()
+        {
+            return Heap[0];
+        }
+        public void Print()
+        {
+            Console.WriteLine(string.Join(", ", Heap));
+        }
+    }
+}
